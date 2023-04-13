@@ -1,0 +1,53 @@
+pipeline{
+    agent any
+    stages{
+        stage("clean workspace"){
+            steps{
+                cleanWs()
+            }
+        }
+        stage("checking out from github"){
+            steps{
+                checkout scmGit(branches: [[name: '*/${Branch}']], 
+                userRemoteConfigs: [[url: '${git_url}']])
+            }
+        }          
+        stage("docker logging"){
+            steps{
+                sh "echo harish | sudo -S docker images > /dev/null"
+            }
+        }
+        stage("checking docker deamon running"){
+            steps{
+                sh "sudo docker images > /dev/null"
+            }
+        }
+        stage("Logging in ECR "){
+            steps{
+                sh "aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 614429738294.dkr.ecr.us-east-2.amazonaws.com"
+            }
+        }
+        stage("Building the image file"){
+            steps{
+                sh "sudo docker build -t database."
+            }
+        }        
+        stage("tagging the image file"){
+            steps{
+                sh "docker tag database 614429738294.dkr.ecr.us-east-2.amazonaws.com/databasecicd"
+            }
+        } 
+         
+        stage("pushing the image in ECR "){
+            steps{
+                sh "docker push 614429738294.dkr.ecr.us-east-2.amazonaws.com/databasecicd"
+            }
+        } 
+        stage("Deploying dockerfile"){
+            steps{
+                sh "kubectl apply -f springDeployment.yaml"
+                sh "kubectl apply -f springService.yaml"
+            }
+        }       
+    }
+}

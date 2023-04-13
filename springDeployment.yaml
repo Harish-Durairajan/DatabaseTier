@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-deployment
+spec:
+  selector:
+    matchLabels:
+      app: spring
+  template:
+    metadata:
+      name: spring-pod
+      labels:
+        app: spring
+    spec:
+      containers:
+        - name: webserver1
+          image: '614429738294.dkr.ecr.us-east-2.amazonaws.com/databasecicd:latest'
+          # image: 'harishdurai/applicationtier:latest'
+          ports:
+            - containerPort: 8080
+
+       
