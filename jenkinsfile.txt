@@ -29,7 +29,7 @@ pipeline{
         }
         stage("Building the image file"){
             steps{
-                sh "sudo docker build -t database."
+                sh "sudo docker build -t database ."
             }
         }        
         stage("tagging the image file"){
