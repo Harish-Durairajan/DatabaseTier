@@ -45,7 +45,7 @@ pipeline{
         } 
         stage("Deploying dockerfile"){
             steps{
-                sh "kubectl apply -f springDeployment.yaml"
+                sh "kubectl apply -f DatabseDeployment.yaml"
             }
         }       
     }
