@@ -8,8 +8,8 @@ pipeline{
         }
         stage("checking out from github"){
             steps{
-                checkout scmGit(branches: [[name: '*/${Branch}']], 
-                userRemoteConfigs: [[url: '${git_url}']])
+                checkout scmGit(branches: [[name: '*/master']], 
+                userRemoteConfigs: [[url: 'https://github.com/Harish-Durairajan/DatabaseTier.git']])
             }
         }          
         stage("docker logging"){
